@@ -99,30 +99,38 @@ namespace Lab2_SGBD
             string[] args = childArr.Split(", "); 
             string[] types = childColumnTypes.Split(", ");
 
-            for (int i = 0; i < childNumberOfColumns; i++)
-            {   
-                switch (types[i])
+            try
+            {
+                for (int i = 0; i < childNumberOfColumns; i++)
                 {
-                    case "string":
-                        da.InsertCommand.Parameters.Add(args[i+1], SqlDbType.VarChar).Value = textBoxes[i].Text;
-                        break;
-                    case "int":
-                        da.InsertCommand.Parameters.Add(args[i+1], SqlDbType.Int).Value = int.Parse(textBoxes[i].Text);
-                        break;
-                    case "float":
-                        da.InsertCommand.Parameters.Add(args[i + 1], SqlDbType.Float).Value = float.Parse(textBoxes[i].Text);
-                        break;
-                    default:
-                        MessageBox.Show("WTF");
-                        break;
+                    switch (types[i])
+                    {
+                        case "string":
+                            da.InsertCommand.Parameters.Add(args[i + 1], SqlDbType.VarChar).Value = textBoxes[i].Text;
+                            break;
+                        case "int":
+                            da.InsertCommand.Parameters.Add(args[i + 1], SqlDbType.Int).Value = int.Parse(textBoxes[i].Text);
+                            break;
+                        case "float":
+                            da.InsertCommand.Parameters.Add(args[i + 1], SqlDbType.Float).Value = float.Parse(textBoxes[i].Text);
+                            break;
+                        default:
+                            MessageBox.Show("WTF");
+                            break;
+                    }
                 }
+
+                cs.Open();
+                da.InsertCommand.ExecuteNonQuery();
+                cs.Close();
+                dsC.Clear();
+                da.Fill(dsC);
             }
 
-            cs.Open();
-            da.InsertCommand.ExecuteNonQuery();
-            cs.Close();
-            dsC.Clear();
-            da.Fill(dsC);
+            catch
+            {
+                MessageBox.Show("Input gresit!");
+            }
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -172,30 +180,38 @@ namespace Lab2_SGBD
             string[] args = childArr.Split(", ");
             string[] types = childColumnTypes.Split(", ");
 
-            for (int i = 0; i < childNumberOfColumns; i++)
+            try
             {
-                switch (types[i])
+                for (int i = 0; i < childNumberOfColumns; i++)
                 {
-                    case "string":
-                        da.UpdateCommand.Parameters.Add(args[i+1], SqlDbType.VarChar).Value = textBoxes[i].Text;
-                        break;
-                    case "int":
-                        da.UpdateCommand.Parameters.Add(args[i + 1], SqlDbType.Int).Value = int.Parse(textBoxes[i].Text);
-                        break;
-                    case "float":
-                        da.UpdateCommand.Parameters.Add(args[i + 1], SqlDbType.Float).Value = float.Parse(textBoxes[i].Text);
-                        break;
+                    switch (types[i])
+                    {
+                        case "string":
+                            da.UpdateCommand.Parameters.Add(args[i + 1], SqlDbType.VarChar).Value = textBoxes[i].Text;
+                            break;
+                        case "int":
+                            da.UpdateCommand.Parameters.Add(args[i + 1], SqlDbType.Int).Value = int.Parse(textBoxes[i].Text);
+                            break;
+                        case "float":
+                            da.UpdateCommand.Parameters.Add(args[i + 1], SqlDbType.Float).Value = float.Parse(textBoxes[i].Text);
+                            break;
+                    }
                 }
+
+                cs.Open();
+                x = da.UpdateCommand.ExecuteNonQuery();
+                cs.Close();
+                dsC.Clear();
+                da.Fill(dsC);
+
+                if (x >= 1)
+                    MessageBox.Show("The record has been updated");
             }
 
-            cs.Open();
-            x = da.UpdateCommand.ExecuteNonQuery();
-            cs.Close();
-            dsC.Clear();
-            da.Fill(dsC);
-
-            if (x >= 1)
-                MessageBox.Show("The record has been updated");
+            catch
+            {
+                MessageBox.Show("Input gresit!");
+            }
         }
     }
 }
